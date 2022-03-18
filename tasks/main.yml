@@ -1,0 +1,89 @@
+---
+
+- name: Load variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "remove existing systemd-networkd configuration"
+  file:
+    path: "/etc/systemd/network"
+    state: absent
+
+- name: "create systemd-networkd directory"
+  file:
+    path: "/etc/systemd/network"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: Create systemd.netdev files
+  block:
+  - name: Create systemd.netdev files
+    template:
+      src: systemd.netdev.j2
+      dest: "/etc/systemd/network/{{ item.filename }}"
+      owner: "{{ systemd_networkd_unix_user }}"
+      group: "{{ systemd_networkd_unix_user }}"
+      mode: 0644
+    when: item.netdev_options is defined and
+          item.netdev_options | selectattr("key", "==", "Kind") and
+          item.netdev_options | selectattr("value", "!=", "WireGuard")
+    with_items: "{{ systemd_networkd_netdev }}"
+
+  - name: Create sensitive systemd.netdev files
+    template:
+      src: systemd.netdev.j2
+      dest: "/etc/systemd/network/{{ item.filename }}"
+      owner: "{{ systemd_networkd_unix_user }}"
+      group: "{{ systemd_networkd_unix_user }}"
+      mode: 0600
+    when: item.netdev_options is defined and
+          item.netdev_options | selectattr("key", "equalto", "Kind") and
+          item.netdev_options | selectattr("value", "equalto", "WireGuard")
+    with_items: "{{ systemd_networkd_netdev }}"
+    notify: restart networkd
+
+- name: Create systemd.networkd files
+  template:
+    src: systemd.network.j2
+    dest: "/etc/systemd/network/{{ item.filename }}"
+    owner: "{{ systemd_networkd_unix_user }}"
+    group: "{{ systemd_networkd_unix_user }}"
+    mode: 0644
+  with_items: "{{ systemd_networkd_network }}"
+  notify: restart networkd
+
+- name: Create symlink to use systemd-resolved's stub-listener
+  file:
+    src: /run/systemd/resolve/stub-resolv.conf
+    dest: /etc/resolv.conf
+    state: link
+    force: yes
+    follow: no
+    owner: root
+    group: root
+
+- name: start and enable networkd
+  service:
+    name: systemd-networkd
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: start and enable resolved
+  service:
+    name: systemd-resolved
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: set timezone
+  timezone:
+    name: "{{ systemd_timesyncd_timezone }}"
+
+- name: start and enable timesyncd
+  service:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+    daemon_reload: yes

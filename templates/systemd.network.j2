@@ -1,0 +1,42 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
+#
+# {{ ansible_managed }}
+#
+
+{% if item.match_options is defined and item.match_options | length > 0 %}
+[Match]
+{% for match_option in item.match_options %}
+{{ match_option.key }}={{ match_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.network_options is defined and item.network_options | length > 0 %}
+[Network]
+{% for network_option in item.network_options %}
+{{ network_option.key }}={{ network_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.dhcp_options is defined and item.dhcp_options | length > 0 %}
+[DHCP]
+{% for dhcp_option in item.dhcp_options %}
+{{ dhcp_option.key }}={{ dhcp_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.addresses is defined and item.addresses | length > 0 %}
+{% for address in item.addresses %}
+[Address]
+{% for address_option in address.options %}
+{{ address_option.key }}={{ address_option.value }}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+
+{% if item.route_options is defined and item.route_options | length > 0 %}
+[Route]
+{% for route_option in item.route_options %}
+{{ route_option.key }}={{ route_option.value }}
+{% endfor %}
+{% endif %}

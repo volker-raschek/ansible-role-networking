@@ -1,0 +1,38 @@
+#
+# {{ ansible_managed }}
+#
+
+{% if item.netdev_options is defined and item.netdev_options | length > 0 %}
+[NetDev]
+{% for netdev_option in item.netdev_options %}
+{{ netdev_option.key }}={{ netdev_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.bond_options is defined and item.bond_options | length > 0 %}
+[Bond]
+{% for bond_option in item.bond_options %}
+{{ bond_option.key }}={{ bond_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.bridge_options is defined and item.bridge_options | length > 0 %}
+[Bridge]
+{% for bridge_option in item.bridge_options %}
+{{ bridge_option.key }}={{ bridge_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.wireguard_options is defined and item.wireguard_options | length > 0 %}
+[WireGuard]
+{% for wireguard_option in item.wireguard_options %}
+{{ wireguard_option.key }}={{ wireguard_option.value }}
+{% endfor %}
+{% endif %}
+
+{% if item.wireguard_peer_options is defined and item.wireguard_peer_options | length > 0 %}
+[WireGuardPeer]
+{% for wireguard_peer_option in item.wireguard_peer_options %}
+{{ wireguard_peer_option.key }}={{ wireguard_peer_option.value }}
+{% endfor %}
+{% endif %}

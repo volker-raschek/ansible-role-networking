@@ -1,0 +1,64 @@
+---
+
+systemd_networkd_netdev: []
+# - netdev_options:
+#   - key: Name
+#     value: bo0
+#   - key: Kind
+#     value: Bond
+#   bond_options:
+#   - key: Mode
+#     value: 802.3ad
+#   - key: TransmitHashPolicy
+#     value: layer3+4
+#   - key: MIIMonitorSec
+#     value: 1s
+#   - key: LACPRransmitRate
+#     value: fast
+#   filename: 10-bo0.netdev
+# - netdev_options:
+#   - key: Name
+#     value: br0
+#   - key: Kind
+#     value: Bridge
+#   bridge_options: {}
+#   filename: 10-br0.netdev
+
+systemd_networkd_network: []
+# - match_options:
+#   - key: Name
+#     value: enp*
+#   network_options:
+#   - key: Bond
+#     value: bo0
+#   filename: 20-enp.network
+# - match_options:
+#   - key: Name
+#     value: wlp*
+#   network_options:
+#   - key: DHCP
+#     value: "yes"
+#   dhcp_options:
+#   - key: RouteMetric
+#     value: 20
+#   filename: 20-wlp.network
+# - match_options:
+#   - key: Name
+#     value: bo0
+#   network_options:
+#   - key: Bridge
+#     value: br0
+#   - key: BindCarrier
+#     value: enp*
+#   filename: 30-bo0.network
+# - match_options:
+#   - key: Name
+#     value: br0
+#   network_options:
+#   - key: DHCP
+#     value: "yes"
+#   dhcp_options:
+#   - key: RouteMetric
+#     value: 10
+
+systemd_timesyncd_timezone: Europe/Berlin

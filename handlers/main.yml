@@ -1,0 +1,11 @@
+---
+
+- name: restart networkd
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    daemon_reload: true
+  with_items:
+  - systemd-networkd
+  - systemd-resolved
+  - systemd-timesyncd
