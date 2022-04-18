@@ -24,19 +24,32 @@
 {% endfor %}
 {% endif %}
 
-{% if item.addresses is defined and item.addresses | length > 0 %}
+{% if item.addresses is defined %}
 {% for address in item.addresses %}
+{% if address.options is defined and address.options | length > 0 %}
+{% if address.name is defined and address.name | length > 0 %}
+# {{ address.name }}
+{% endif %}
 [Address]
-{% for address_option in address.options %}
-{{ address_option.key }}={{ address_option.value }}
+{% for option in address.options %}
+{{ option.key }}={{ option.value }}
 {% endfor %}
+{% endif %}
 
 {% endfor %}
 {% endif %}
 
-{% if item.route_options is defined and item.route_options | length > 0 %}
+{% if item.routes is defined %}
+{% for route in item.routes %}
+{% if route.options is defined and route.options | length > 0 %}
+{% if route.name is defined and route.name | length > 0 %}
+# {{ route.name }}
+{% endif %}
 [Route]
-{% for route_option in item.route_options %}
-{{ route_option.key }}={{ route_option.value }}
+{% for option in route.options %}
+{{ option.key }}={{ option.value }}
+{% endfor %}
+{% endif %}
+
 {% endfor %}
 {% endif %}

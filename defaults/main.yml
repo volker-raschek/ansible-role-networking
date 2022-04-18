@@ -16,6 +16,7 @@ systemd_networkd_netdev: []
 #   - key: LACPRransmitRate
 #     value: fast
 #   filename: 10-bo0.netdev
+#
 # - netdev_options:
 #   - key: Name
 #     value: br0
@@ -23,6 +24,31 @@ systemd_networkd_netdev: []
 #     value: Bridge
 #   bridge_options: {}
 #   filename: 10-br0.netdev
+#
+# - netdev_options:
+#   - key: Name
+#     value: wg0
+#   - key: Kind
+#     value: wireguard
+#   wireguard_options:
+#   - key: PrivateKey
+#     value: "my-priv-key"
+#   - key: ListenPort
+#     value: "51820"
+#   wireguard_peers:
+#   - name: "a description"
+#     options:
+#     - key: PublicKey
+#       value: "public-key-of-remote-peer"
+#     - key: PresharedKey
+#       value: "preshared-key"
+#     - key: AllowedIPs
+#       value: "allowd-ips"
+#     - key: PersistentKeepalive
+#       value: "25"
+#     - key: Endpoint
+#       value: my-endpoint
+#   filename: 10-wireguard.netdev
 
 systemd_networkd_network: []
 # - match_options:
@@ -42,6 +68,7 @@ systemd_networkd_network: []
 #   - key: RouteMetric
 #     value: 20
 #   filename: 20-wlp.network
+#
 # - match_options:
 #   - key: Name
 #     value: bo0
@@ -60,5 +87,26 @@ systemd_networkd_network: []
 #   dhcp_options:
 #   - key: RouteMetric
 #     value: 10
+#
+# - match_options:
+#   - key: Name
+#     value: wg0
+#   network_options:
+#   - key: DNS
+#     value: "1.2.3.4"
+#   - key: DNSDefaultRoute
+#     value: "false"
+#   addresses:
+#   - options:
+#     - key: Address
+#       value: "192.168.178.100/32"
+#   routes:
+#   - name: VPN-Network
+#     options:
+#     - key: Destination
+#       value: "192.168.178.0/24"
+#     - key: Gateway
+#       value: "192.168.178.100"
+#   filename: "50-wireguard.network"
 
 systemd_timesyncd_timezone: Europe/Berlin

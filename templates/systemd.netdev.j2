@@ -1,3 +1,4 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
 #
 # {{ ansible_managed }}
 #
@@ -30,9 +31,17 @@
 {% endfor %}
 {% endif %}
 
-{% if item.wireguard_peer_options is defined and item.wireguard_peer_options | length > 0 %}
+{% if item.wireguard_peers is defined %}
+{% for wireguard_peer in item.wireguard_peers %}
+{% if wireguard_peer.options is defined and wireguard_peer.options | length > 0 %}
+{% if wireguard_peer.name is defined and wireguard_peer.name | length > 0 %}
+# {{ wireguard_peer.name }}
+{% endif %}
 [WireGuardPeer]
-{% for wireguard_peer_option in item.wireguard_peer_options %}
-{{ wireguard_peer_option.key }}={{ wireguard_peer_option.value }}
+{% for option in wireguard_peer.options %}
+{{ option.key }}={{ option.value }}
+{% endfor %}
+{% endif %}
+
 {% endfor %}
 {% endif %}
