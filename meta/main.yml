@@ -16,9 +16,9 @@ galaxy_info:
     versions:
     - "35"
 
-  galaxy_tags:
-  - systemd-networkd
-  - wiregurd
-  - resolvectl
+  # galaxy_tags:
+  # - systemd-networkd
+  # - wiregurd
+  # - resolvectl
 
 dependencies: []

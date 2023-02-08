@@ -1,15 +1,15 @@
 ---
 
 - name: Include OS-specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
 - name: "Remove existing systemd-networkd configuration"
-  file:
+  ansible.builtin.file:
     path: "/etc/systemd/network"
     state: absent
 
 - name: "Create systemd-networkd directory"
-  file:
+  ansible.builtin.file:
     path: "/etc/systemd/network"
     owner: root
     group: root
@@ -19,7 +19,7 @@
 - name: Create systemd.netdev files
   block:
   - name: Create systemd.netdev files
-    template:
+    ansible.builtin.template:
       src: systemd.netdev.j2
       dest: "/etc/systemd/network/{{ item.filename }}"
       owner: "{{ systemd_networkd_unix_user }}"
@@ -31,7 +31,7 @@
     with_items: "{{ systemd_networkd_netdev }}"
 
   - name: Create sensitive systemd.netdev files
-    template:
+    ansible.builtin.template:
       src: systemd.netdev.j2
       dest: "/etc/systemd/network/{{ item.filename }}"
       owner: "{{ systemd_networkd_unix_user }}"
@@ -45,7 +45,7 @@
     notify: restart networkd
 
 - name: Create systemd.networkd files
-  template:
+  ansible.builtin.tempansible.builtin.file:
     src: systemd.network.j2
     dest: "/etc/systemd/network/{{ item.filename }}"
     owner: "{{ systemd_networkd_unix_user }}"
@@ -55,36 +55,36 @@
   notify: restart networkd
 
 - name: Create symlink to use systemd-resolved's stub-listener
-  file:
+  ansible.builtin.file:
     src: /run/systemd/resolve/stub-resolv.conf
     dest: /etc/resolv.conf
     state: link
-    force: yes
-    follow: no
+    force: true
+    follow: false
     owner: root
     group: root
 
 - name: Start and enable systemd-networkd
-  service:
+  ansible.builtin.systemd:
     name: systemd-networkd
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
 
 - name: Start and enable systemd-resolved
-  service:
+  ansible.builtin.systemd:
     name: systemd-resolved
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
 
 - name: Set system timezone
-  timezone:
+  community.general.timezone:
     name: "{{ systemd_timesyncd_timezone }}"
 
 - name: Start and enable systemd-timesyncd
-  service:
+  ansible.builtin.systemd:
     name: systemd-timesyncd
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
