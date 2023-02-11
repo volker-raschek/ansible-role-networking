@@ -45,7 +45,7 @@
     notify: restart networkd
 
 - name: Create systemd.networkd files
-  ansible.builtin.tempansible.builtin.file:
+  ansible.builtin.template:
     src: systemd.network.j2
     dest: "/etc/systemd/network/{{ item.filename }}"
     owner: "{{ systemd_networkd_unix_user }}"
