@@ -1,6 +1,6 @@
 ---
 
-- name: restart networkd
+- name: Restart networkd
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: restarted
