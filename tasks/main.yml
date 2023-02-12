@@ -42,7 +42,7 @@
           item.netdev_options | selectattr("value", "equalto", "wireguard")
     with_items: "{{ systemd_networkd_netdev }}"
     no_log: true
-    notify: restart networkd
+    notify: Restart networkd
 
 - name: Create systemd.networkd files
   ansible.builtin.template:
@@ -52,7 +52,7 @@
     group: "{{ systemd_networkd_unix_user }}"
     mode: 0644
   with_items: "{{ systemd_networkd_network }}"
-  notify: restart networkd
+  notify: Restart networkd
 
 - name: Create symlink to use systemd-resolved's stub-listener
   ansible.builtin.file:
