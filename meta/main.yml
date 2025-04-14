@@ -1,4 +1,5 @@
 galaxy_info:
+  namespace: volker_raschek
   role_name: networking
   author: Markus Pesch
   description: Role to configure network interfaces via systemd on different distributions
