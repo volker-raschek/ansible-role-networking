@@ -1,6 +1,5 @@
 # networking
 
-[![Build Status](https://drone.cryptic.systems/api/badges/volker.raschek/networking-role/status.svg)](https://drone.cryptic.systems/volker.raschek/networking-role)
 [![Ansible Role](https://img.shields.io/ansible/role/d/58433)](https://galaxy.ansible.com/volker_raschek/networking)
 
 With following role can the networking stack provided by systemd be configured.
